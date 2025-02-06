@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  whisper_transcription:
+    build: .
+    container_name: whisper_transcription
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - "8080:8080"
