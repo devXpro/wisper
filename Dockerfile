@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.6.0-cudnn8-runtime-ubuntu24.04
+FROM nvidia/cuda:12.3.1-cudnn8-runtime-ubuntu22.04
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -15,7 +15,7 @@ RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Install Python packages with specific CUDA version
-RUN pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+RUN pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 RUN pip3 install --no-cache-dir openai-whisper
 
 # Add CUDA to PATH
