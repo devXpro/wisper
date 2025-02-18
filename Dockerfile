@@ -29,7 +29,10 @@ COPY transcription_api /app/transcription_api
 
 # Build Go service
 WORKDIR /app/transcription_api
-RUN go mod tidy && go build -o transcription_api
+# Инициализируем новый модуль с правильной версией Go
+RUN go mod init whisper && \
+    go mod tidy && \
+    go build -o transcription_api
 
 # Copy and setup start script
 COPY transcription_api/start.sh .
