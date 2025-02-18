@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.3.1-cudnn8-runtime-ubuntu22.04
+FROM nvidia/cuda:12.6.3-cudnn-runtime-ubuntu22.04
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -15,7 +15,7 @@ RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Install Python packages with specific CUDA version
-RUN pip3 install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+RUN pip3 install --no-cache-dir torch torchvision torchaudio
 RUN pip3 install --no-cache-dir openai-whisper
 
 # Add CUDA to PATH
@@ -35,7 +35,8 @@ RUN go mod tidy && go build -o transcription_api
 COPY transcription_api/start.sh .
 RUN chmod +x start.sh
 
-# Добавим проверку CUDA при запуске контейнера
+# Add CUDA check to start script
 RUN echo '#!/bin/bash\npython3 -c "import torch; print(\"CUDA available:\", torch.cuda.is_available()); print(\"CUDA version:\", torch.version.cuda if torch.cuda.is_available() else \"N/A\")" && ./transcription_api' > start.sh
+RUN chmod +x start.sh
 
 CMD ["./start.sh"]
